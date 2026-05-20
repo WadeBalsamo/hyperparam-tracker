@@ -1,0 +1,172 @@
+@model List<PaperCutDash.Models.Run>
+@{ ViewData["Title"] = "PaperCutDash"; }
+
+<h1>PaperCutDash</h1>
+<p class="text-muted">track PaperCut runs, tweak settings, leave notes</p>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" asp-validation-summary="All"></div>
+}
+
+<!-- === Create inline === -->
+<h4>New run</h4>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="row mb-2">
+        <div class="col"><input asp-for="@(new PaperCutDash.Models.Run()).Name" name="Name" class="form-control" placeholder="Run name" required /></div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <label class="form-label small">config.json (optional — overrides fields below by name)</label>
+            <input type="file" name="configFile" class="form-control form-control-sm" accept=".json" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3 mb-2"><label class="small">Pace</label><input name="Pace" type="number" step="0.05" value="1.2" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">Target len (s)</label><input name="TargetOutputLenSeconds" type="number" step="1" value="90" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">Coherence weight</label><input name="CoherenceWeight" type="number" step="0.05" value="0.3" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">Variance weight</label><input name="VarianceWeight" type="number" step="0.05" value="0.5" class="form-control form-control-sm" /></div>
+    </div>
+    <div class="row">
+        <div class="col-3 mb-2"><label class="small">Min secs/cut</label><input name="MinimumSecsPerCut" type="number" step="0.5" value="3" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">Padding</label><input name="Padding" type="number" step="0.5" value="7" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">End padding</label><input name="EndPadding" type="number" step="0.1" value="0.5" class="form-control form-control-sm" /></div>
+        <div class="col-3 mb-2"><label class="small">Model size</label><input name="ModelSize" value="medium.en" class="form-control form-control-sm" /></div>
+    </div>
+    <div class="row">
+        <div class="col mb-2"><label class="small">Positive prompt</label><input name="PositivePrompt" class="form-control form-control-sm" /></div>
+        <div class="col mb-2"><label class="small">Negative prompt</label><input name="NegativePrompt" class="form-control form-control-sm" /></div>
+    </div>
+    <div class="row mb-2">
+        <div class="col mb-2"><label class="small">Filter pos prompt</label><input name="PosFilterPrompt" class="form-control form-control-sm" /></div>
+        <div class="col mb-2"><label class="small">Filter neg prompt</label><input name="NegFilterPrompt" class="form-control form-control-sm" /></div>
+    </div>
+    <div class="row align-items-end mb-3">
+        <div class="col-auto">
+            <label class="small form-check-label"><input name="PostFilter" value="true" type="checkbox" checked class="form-check-input" /> Post filter</label>
+        </div>
+        <div class="col-auto">
+            <label class="small form-check-label"><input name="PreFilter" value="true" type="checkbox" class="form-check-input" /> Pre filter</label>
+        </div>
+        <div class="col-auto">
+            <label class="small form-check-label"><input name="Quick" value="true" type="checkbox" class="form-check-input" /> Quick</label>
+        </div>
+        <div class="col-auto">
+            <label class="small form-check-label"><input name="Retime" value="true" type="checkbox" checked class="form-check-input" /> Retime</label>
+        </div>
+        <div class="col-auto">
+            <label class="small form-check-label"><input name="PosSentimentOnly" value="true" type="checkbox" class="form-check-input" /> Pos sentiment only</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm">Create run</button>
+</form>
+
+<hr />
+
+<!-- === Runs table === -->
+<h4>Runs</h4>
+@if (!Model.Any())
+{
+    <p class="text-muted">No runs yet.</p>
+}
+else
+{
+    <div class="accordion" id="runsAccordion">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var r = Model[i];
+        var id = $"run-{i}";
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@id">
+                    <strong>@r.Name</strong>&nbsp;<span class="text-muted small">@r.CreatedAt.ToLocalTime().ToString("g")</span>
+                </button>
+            </h2>
+            <div id="@id" class="accordion-collapse collapse" data-bs-parent="#runsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-sm small mb-0">
+                                <tr><th>Pace</th><td>@r.Pace</td><th>Target len</th><td>@r.TargetOutputLenSeconds s</td></tr>
+                                <tr><th>Coherence w</th><td>@r.CoherenceWeight</td><th>Variance w</th><td>@r.VarianceWeight</td></tr>
+                                <tr><th>Min sec/cut</th><td>@r.MinimumSecsPerCut</td><th>Padding</th><td>@r.Padding / @r.EndPadding</td></tr>
+                                <tr><th>Filter % irrel</th><td>@r.FilterNPercentIrrelevant</td><th>Model</th><td>@r.ModelSize</td></tr>
+                                <tr><th>Coh/Timeliness</th><td>@r.CoherenceOverTimeliness</td><th>Duration &micro;param</th><td>@r.DurationMicroparam</td></tr>
+                                <tr><th>Pre filter</th><td>@r.PreFilter (pos@(r.PreFilterPosWeight) / neg@(r.PreFilterNegWeight))</td>
+                                    <th>Post filter</th><td>@r.PostFilter (pos@(r.PostFilterPosWeight) / neg@(r.PostFilterNegWeight))</td></tr>
+                                <tr><th>Max groups</th><td>@r.MaxGroups</td><th>Split parts</th><td>@r.SplitParts</td></tr>
+                                <tr><th>Retime</th><td>@r.Retime</td><th>Quick</th><td>@r.Quick</td></tr>
+                                <tr><th>Score weight</th><td>@r.ScoreWeight</td><th>Coh weight</th><td>@r.CohWeight</td></tr>
+                                <tr><th>Beta split w</th><td>@r.BetasplitTimepreferenceWeight</td><th>Extra pos w</th><td>@r.ExtraPosPromptWeight</td></tr>
+                                <tr><th>Extra sentiment w</th><td>@r.ExtraSentimentWeight</td><th>Pos sentiment only</th><td>@r.PosSentimentOnly</td></tr>
+                                <tr><th>Coherence buf</th><td>@r.CoherenceBuffer</td><th>Auto</th><td>@r.Autonomous</td></tr>
+                                <tr><th>Render</th><td>@r.RenderEnabled</td><th>Burn subs</th><td>@r.BurnInSubtitles</td></tr>
+                                <tr><th>Video fade</th><td>@r.VideoFadeLen</td><th>Audio fade</th><td>@r.AudioFadeLen</td></tr>
+                                <tr><th>Use GPT</th><td>@r.UseGpt</td><th>Beta</th><td>@r.BetaMode</td></tr>
+                                <tr><th>Order</th><td>@r.Order</td><th>Nonce</th><td>@r.Nonce</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <strong class="small">Positive prompt</strong>
+                            <p class="small">@r.PositivePrompt</p>
+                            <strong class="small">Negative prompt</strong>
+                            <p class="small">@r.NegativePrompt</p>
+                            <strong class="small">Filter pos</strong>
+                            <p class="small">@r.PosFilterPrompt</p>
+                            <strong class="small">Filter neg</strong>
+                            <p class="small">@r.NegFilterPrompt</p>
+
+                            @if (!string.IsNullOrEmpty(r.EditedSrt))
+                            {
+                                <strong class="small">Edited SRT</strong>
+                                <pre class="small" style="max-height:150px;overflow:auto;background:#f6f6f6;padding:6px;">@r.EditedSrt</pre>
+                            }
+                            @if (r.EditedDuration.HasValue)
+                            {
+                                <p class="small mb-0"><strong>Edited duration:</strong> @r.EditedDuration.Value.ToString("F1") s</p>
+                            }
+                            @if (!string.IsNullOrEmpty(r.ErrorMessage))
+                            {
+                                <div class="alert alert-danger small py-1 px-2 mb-2">@r.ErrorMessage</div>
+                            }
+                            @if (!string.IsNullOrEmpty(r.ConfigJsonRaw))
+                            {
+                                <details class="small">
+                                    <summary>config.json</summary>
+                                    <pre style="max-height:100px;overflow:auto;background:#f6f6f6;padding:6px;">@r.ConfigJsonRaw</pre>
+                                </details>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Comments for this run -->
+                    <div class="mt-3 border-top pt-2">
+                        <strong class="small">Comments</strong>
+                        @if (!r.Comments.Any())
+                        {
+                            <p class="small text-muted mb-1">No comments yet.</p>
+                        }
+                        @foreach (var c in r.Comments.OrderBy(c => c.CreatedAt))
+                        {
+                            <div class="border rounded p-1 mb-1 small">
+                                <strong>@c.Author</strong> <span class="text-muted">@c.CreatedAt.ToLocalTime().ToString("g")</span>
+                                <div>@c.Body</div>
+                            </div>
+                        }
+                        <form asp-action="Comment" asp-route-id="@r.Id" method="post" class="row row-cols-lg-auto g-1 align-items-end mt-1">
+                            @Html.AntiForgeryToken()
+                            <div class="col-4"><input name="author" placeholder="Name" class="form-control form-control-sm" /></div>
+                            <div class="col-6"><input name="body" placeholder="Comment" class="form-control form-control-sm" /></div>
+                            <div class="col-2"><button class="btn btn-outline-primary btn-sm">Add</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+}
