@@ -150,7 +150,7 @@ public class RunsController : Controller
 
     // --- Inline comment ---
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Comment(Guid id, string author, string body)
+    public async Task<IActionResult> Comment(Guid id, string? author, string body)
     {
         _db.Comments.Add(new Comment { RunId = id, Author = author ?? "anon", Body = body ?? "" });
         await _db.SaveChangesAsync();

@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../PaperCutDash.csproj" />
+  </ItemGroup>
+
 </Project>

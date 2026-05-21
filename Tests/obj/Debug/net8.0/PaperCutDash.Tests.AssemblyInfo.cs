@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaperCutDash.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63bc330cb42f5186ccf5e697952279f06a0bc5e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaperCutDash.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaperCutDash.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/root/hyperparam-tracker/PaperCutDash/PaperCutDash.csproj": {}
+    "/root/hyperparam-tracker/PaperCutDash.csproj": {}
   },
   "projects": {
-    "/root/hyperparam-tracker/PaperCutDash/PaperCutDash.csproj": {
+    "/root/hyperparam-tracker/PaperCutDash.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/root/hyperparam-tracker/PaperCutDash/PaperCutDash.csproj",
+        "projectUniqueName": "/root/hyperparam-tracker/PaperCutDash.csproj",
         "projectName": "PaperCutDash",
-        "projectPath": "/root/hyperparam-tracker/PaperCutDash/PaperCutDash.csproj",
+        "projectPath": "/root/hyperparam-tracker/PaperCutDash.csproj",
         "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/root/hyperparam-tracker/PaperCutDash/obj/",
+        "outputPath": "/root/hyperparam-tracker/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/root/.nuget/NuGet/NuGet.Config"

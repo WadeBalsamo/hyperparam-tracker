@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Rl+B6HC9MDQ=",
+  "dgSpecHash": "+LnXASDtvOw=",
   "success": true,
-  "projectFilePath": "/root/hyperparam-tracker/PaperCutDash.Tests/PaperCutDash.Tests.csproj",
+  "projectFilePath": "/root/hyperparam-tracker/Tests/PaperCutDash.Tests.csproj",
   "expectedPackageFiles": [
     "/root/.nuget/packages/microsoft.codecoverage/17.8.0/microsoft.codecoverage.17.8.0.nupkg.sha512",
     "/root/.nuget/packages/microsoft.data.sqlite.core/8.0.27/microsoft.data.sqlite.core.8.0.27.nupkg.sha512",

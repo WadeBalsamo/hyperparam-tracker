@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kPKhMugvmvI=",
+  "dgSpecHash": "uXsemHV98gY=",
   "success": true,
-  "projectFilePath": "/root/hyperparam-tracker/PaperCutDash/PaperCutDash.csproj",
+  "projectFilePath": "/root/hyperparam-tracker/PaperCutDash.csproj",
   "expectedPackageFiles": [
     "/root/.nuget/packages/microsoft.data.sqlite.core/8.0.27/microsoft.data.sqlite.core.8.0.27.nupkg.sha512",
     "/root/.nuget/packages/microsoft.entityframeworkcore/8.0.27/microsoft.entityframeworkcore.8.0.27.nupkg.sha512",
