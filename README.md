@@ -1,6 +1,6 @@
 # PaperCutDash
 
-A hyperparameter tracking dashboard for PaperCut AI video editor, built with **ASP.NET Core 8 MVC**. Enables experimentation teams to log editing runs with 40+ tunable hyperparameters, upload configuration presets via JSON, and collaboratively document results through inline comments. Designed to discover optimal clustering parameters, NSP thresholds, and coherence levels for different media types (podcasts, interviews, observational footage, focus groups).
+A hyperparameter tracking dashboard for PaperCut AI video editor, built with **ASP.NET Core 8 MVC**. Enables experimentation logs for 40+ tunable hyperparameters, upload configuration presets via JSON and comments for easy comparisons. Designed to discover optimal clustering parameters, NSP thresholds, and coherence levels for different media types (podcasts, interviews, observational footage, focus groups) for the 'mode' feature development.
 
 ## Tech Stack
 
@@ -35,9 +35,8 @@ if (prop?.CanWrite) { /* type-safe assignment */ }
 Unknown fields are silently skipped (no errors). Supports extensibility—new Run properties are automatically mappable.
 
 ### Data Persistence
-- **EF Core DbContext** with lazy-loading of Comments collection
+- **EF Core DbContext** with Comment collection
 - **Migrations**: Auto-generated on startup via `EnsureCreated()` 
-- **Seeding**: Initial 3 demo runs with realistic hyperparameter presets and sample comments
 - **Async operations**: All database calls use `async/await` for non-blocking I/O
 
 ## How It Works
@@ -58,23 +57,6 @@ dotnet run
 Server listens on `http://localhost:5029`. Navigate to `/Runs` to view dashboard.
 
 ![Screenshot](./screenshot.png)
-
-### Creating a Run with JSON Config
-
-```json
-{
-  "Name": "interview-01",
-  "Pace": 1.2,
-  "CoherenceWeight": 0.4,
-  "PositivePrompt": "key insights, speaker A",
-  "NegativePrompt": "filler, background noise",
-  "TargetOutputLenSeconds": 180,
-  "ModelSize": "large",
-  "Quick": true
-}
-```
-
-Upload this file via the form. The controller will parse and assign all matching properties. Fields not present in the model are ignored.
 
 ## Testing
 
